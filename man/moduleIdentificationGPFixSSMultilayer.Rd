@@ -10,21 +10,15 @@ moduleIdentificationGPFixSSMultilayer(W, zi, xrest, x0, lambdai = 1,
 \arguments{
 \item{W}{edge score matrix of the network, n x n matrix}
 
-\item{zi}{node score vector of the network 1, n_1-length vector}
+\item{zi}{node score vector of this layer, n-length vector}
 
-\item{xrest}{from the rest membership \code{\link{vecdot}}}
+\item{xrest}{consensus solution from the rest membership \code{\link{vecconsensus}}}
+
+\item{lambda}{parameter in objective, coefficient of node score of network}
 
 \item{maxiter}{maximal interation of whole procedure}
 
 \item{a}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
-
-\item{A}{inter-layer links weight, n_1 x n_2 matrix}
-
-\item{lambda1}{parameter in objective, coefficient of node score of network 1}
-
-\item{lambda2}{parameter in objective, coefficient of node score of network 2}
-
-\item{lambda3}{parameter in objective, coefficient of inter-layer links part}
 }
 \value{
 a list containing solution for network 1 and network 2
@@ -33,31 +27,28 @@ a list containing solution for network 1 and network 2
 Algorithm for Module Identification on multi-layer network sharing the same set of genes
 }
 \examples{
-n1=100
-k1=20
-theta1 = 0.5
-n2=80
-k2=10
-theta2 = 0.5
-ppresult <- twolayernetworkSimulation(n1,k1,theta1,n2,k2,theta2)
-A <- ppresult[[3]]
-pp <- ppresult[[1]]
+n=100
+k=20
+theta = 0.5
+pp <- networkSimulation(n,k,theta)
+W <- pp[[1]]
 moduleid <- pp[[3]]
-netid <- 1:n1
-restp<- netid[-moduleid]
-pp2 <- ppresult[[2]]
-moduleid2 <- pp2[[3]]
-## use default parameters here
-modres=moduleIdentificationGPFixSSTwolayer(pp[[1]],pp[[2]],rep(1/n1,n1),
-pp2[[1]],pp2[[2]],rep(1/n2,n2),A)
-predictedid<-which(modres[[1]]!=0)
-recall = length(intersect(predictedid,moduleid))/length(moduleid)
-precise = length(intersect(predictedid,moduleid))/length(predictedid)
-F1 = 2*precise*recall/(precise+recall)
-predictedid2<-which(modres[[2]]!=0)
-recall2 = length(intersect(predictedid2,moduleid2))/length(moduleid2)
-precise2 = length(intersect(predictedid2,moduleid2))/length(predictedid2)
-F2 = 2*precise2*recall2/(precise2+recall2)
+z1 <- runif(n, min=0, max=1)
+z1[moduleid] <- runif(k, min=theta, max=1)
+z2 <- runif(n, min=0, max=1)
+z2[moduleid] <- runif(k, min=theta, max=1)
+z3 <- runif(n, min=0, max=1)
+z3[moduleid] <- runif(k, min=theta, max=1)
+x0=rep(1/n,n)
+x1=x0
+x2=x0
+x3=x0
+xrest = vecconsensus(cbind(x2,x3))
+x1 = moduleIdentificationGPFixSSMultilayer(W,z1,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
+xrest = vecconsensus(cbind(x1,x3))
+x2 = moduleIdentificationGPFixSSMultilayer(W,z2,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
+xrest = vecconsensus(cbind(x1,x2))
+x3 = moduleIdentificationGPFixSSMultilayer(W,z3,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
 }
 \author{
 Dong Li, \email{dxl466@cs.bham.ac.uk}
@@ -66,7 +57,7 @@ Dong Li, \email{dxl466@cs.bham.ac.uk}
 MOUNTAIN
 }
 \seealso{
-\code{\link{vecdot}}
+\code{\link{vecconsensus}}
 }
 \keyword{identification,}
 \keyword{module}
