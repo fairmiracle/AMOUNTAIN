@@ -1,0 +1,12 @@
+Package: AMOUNTAIN
+Type: Package
+Title: Active modules for multilayer weighted gene co-expression networks: a continuous optimization approach
+Version: 0.99.0
+Date: 2016-05-28
+Author: Dong Li, Shan He, Zhisong Pan and Guyu Hu
+Maintainer: Dong Li <dxl466@cs.bham.ac.uk>
+Description: A pure data-driven gene network, weighted gene co-expression network (WGCN) could be constructed only from expression profile. Different layers in such networks may represent different time points, multiple conditions or various species. AMOUNTAIN aims to search active modules in multi-layer WGCN using a continuous optimization approach.
+License: GPL (>= 2)
+Depends: qgraph
+RoxygenNote: 5.0.1
+biocViews: GeneExpression, Microarray, DifferentialExpression, Network
