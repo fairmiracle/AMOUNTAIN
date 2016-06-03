@@ -2,7 +2,7 @@
 
 export(EuclideanProjectionENNORM)
 export(moduleIdentificationGPFixSS)
+export(moduleIdentificationGPFixSSMultilayer)
 export(moduleIdentificationGPFixSSTwolayer)
 export(networkSimulation)
 export(twolayernetworkSimulation)
-importFrom("stats", "runif")
