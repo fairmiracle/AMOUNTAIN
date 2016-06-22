@@ -1,2 +1,11 @@
-============2016.5.30=========
-Submitted to Bioconductor
+CHANGES IN VERSION 0.99.1
+------------------------
+NEW FEATURES
+
+    o Initial version
+
+USER-LEVEL CHANGES
+
+    o More comprehensive help pages
+
+    o BiocStyle Vignette

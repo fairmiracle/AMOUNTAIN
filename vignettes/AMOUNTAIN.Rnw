@@ -4,7 +4,11 @@
 \author{Dong Li \\ dxl466@cs.bham.ac.uk\\
 School of Computer Science, The University of Birmingham, UK
 }
+\date{Date modified: \Sexpr{Sys.Date()}}
 %\VignetteIndexEntry{Usage of AMOUNTAIN}
+<<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
@@ -167,6 +171,10 @@ for (i in 1:100) {
 
 \section{Biological explanation}
 Finally we can do gene annotation enrichment analysis with intergative tools like DAVID\footnote{https://david.ncifcrf.gov} or Enrichr\footnote{http://amp.pharm.mssm.edu/Enrichr}, to see whether a module gene list can be explained by existing biological process, pathways or even diseases.
+\section{Session info}
+<<sessionInfo, results=tex, echo=FALSE>>=
+toLatex(sessionInfo())
+@
  \begin{thebibliography}{1}
 
   \bibitem{Tensor} Li W, Liu C C, Zhang T, et al. Integrative analysis of many weighted co-expression networks using tensor computation. PLoS Comput Biol, 2011, 7(6): e1001106.
