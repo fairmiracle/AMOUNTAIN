@@ -14,7 +14,11 @@ moduleIdentificationGPFixSSMultilayer(W, zi, xrest, x0, lambdai = 1,
 
 \item{xrest}{consensus solution from the rest membership \code{\link{vecconsensus}}}
 
-\item{lambda}{parameter in objective, coefficient of node score of network}
+\item{x0}{initial solution, n-length vector}
+
+\item{lambdai}{parameter in objective, coefficient of node score of current layer}
+
+\item{lambda}{parameter in objective, coefficient of node score of other layers}
 
 \item{maxiter}{maximal interation of whole procedure}
 

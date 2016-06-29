@@ -301,7 +301,9 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
 #' @param W edge score matrix of the network, n x n matrix
 #' @param zi node score vector of this layer, n-length vector
 #' @param xrest consensus solution from the rest membership \code{\link{vecconsensus}}
-#' @param lambda parameter in objective, coefficient of node score of network
+#' @param x0 initial solution, n-length vector
+#' @param lambdai parameter in objective, coefficient of node score of current layer
+#' @param lambda parameter in objective, coefficient of node score of other layers
 #' @param a parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
 #' @param maxiter maximal interation of whole procedure
 #' 
