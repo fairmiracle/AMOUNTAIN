@@ -9,3 +9,15 @@ USER-LEVEL CHANGES
     o More comprehensive help pages
 
     o BiocStyle Vignette
+
+
+CHANGES IN VERSION 0.99.3
+------------------------
+NEW FEATURES
+
+    o C implementations
+
+USER-LEVEL CHANGES
+
+    o Faster choice of C versions
+    

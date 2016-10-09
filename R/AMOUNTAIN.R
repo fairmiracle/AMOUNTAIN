@@ -110,7 +110,7 @@ twolayernetworkSimulation<-function(n1,k1,theta1,n2,k2,theta2){
 #' @return a list containing function objective vector and the solution 
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
-#' @references MOUNTAIN
+#' @references AMOUNTAIN
 #' @seealso \code{\link{EuclideanProjectionENNORM}}
 #' @keywords module identification
 #' 
@@ -227,7 +227,7 @@ EuclideanProjectionENNORM <- function(y,t,alpha = 0.5){
 #' @return a list containing solution for network 1 and network 2 
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
-#' @references MOUNTAIN
+#' @references AMOUNTAIN
 #' @seealso \code{\link{EuclideanProjectionENNORM}}
 #' @keywords module identification, two-layer
 #' 
@@ -310,7 +310,7 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
 #' @return a list containing solution for network 1 and network 2 
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
-#' @references MOUNTAIN
+#' @references AMOUNTAIN
 #' @seealso \code{\link{vecconsensus}}
 #' @keywords module identification, two-layer
 #' 
