@@ -221,10 +221,11 @@ EuclideanProjectionENNORM <- function(y,t,alpha = 0.5){
 #' @param lambda1 parameter in objective, coefficient of node score of network 1
 #' @param lambda2 parameter in objective, coefficient of node score of network 2
 #' @param lambda3 parameter in objective, coefficient of inter-layer links part
-#' @param a parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
+#' @param a1 parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
+#' @param a2 parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
 #' @param maxiter maximal interation of whole procedure
 #' 
-#' @return a list containing solution for network 1 and network 2 
+#' @return a list containing solution for network 1 and network 2 and objective
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
 #' @references AMOUNTAIN
@@ -260,7 +261,7 @@ EuclideanProjectionENNORM <- function(y,t,alpha = 0.5){
 #' @export
 #' 
 moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
-                                    lambda2=1,lambda3=1,maxiter=1000,a=0.5){
+                                    lambda2=1,lambda3=1,maxiter=1000,a1=0.5,a2=0.5){
     x = x0
     y = y0
     epsilon = 1e-6
@@ -274,10 +275,10 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
         #y = x-1*grad
         #print(sum(y)+0.5*gamma*sum(y*y))
         func[iteration] = f_x
-        x_cand = EuclideanProjectionENNORM(x-1*grad_x,t=1,alpha = a)
+        x_cand = EuclideanProjectionENNORM(x-1*grad_x,t=1,alpha = a1)
         #grad_x = -W1%*%x_cand-lambda1*z1-A%*%y
         
-        y_cand = EuclideanProjectionENNORM(y-1*grad_y,t=1,alpha = a)
+        y_cand = EuclideanProjectionENNORM(y-1*grad_y,t=1,alpha = a2)
         #grad_y = -W2%*%y_cand-lambda2*z2-t(A)%*%grad_x
         #x_cand = EuclideanProjection(x-1*grad,t=radius)
         #x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
@@ -291,7 +292,7 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
         f_x = -0.5*t(x)%*%W1%*%x-lambda1*(t(z1)%*%x)-0.5*t(y)%*%W2%*%y-
             lambda2*(t(z2)%*%y)-t(x)%*%A%*%y
     }
-    return (list(x,y))
+    return (list(x,y,func[1:iteration]))
 }
 
 #' Module Identification for multi-layer network
@@ -299,85 +300,52 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
 #' Algorithm for Module Identification on multi-layer network sharing the same set of genes
 #' 
 #' @param W edge score matrix of the network, n x n matrix
-#' @param zi node score vector of this layer, n-length vector
-#' @param xrest consensus solution from the rest membership \code{\link{vecconsensus}}
+#' @param listzs a list of node score vectors, each layer has a n-length vector
 #' @param x0 initial solution, n-length vector
-#' @param lambdai parameter in objective, coefficient of node score of current layer
-#' @param lambda parameter in objective, coefficient of node score of other layers
 #' @param a parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
+#' @param lambda parameter in objective, coefficient of node score of other layers
 #' @param maxiter maximal interation of whole procedure
 #' 
-#' @return a list containing solution for network 1 and network 2 
+#' @return a list containing objective values and solution 
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
 #' @references AMOUNTAIN
-#' @seealso \code{\link{vecconsensus}}
-#' @keywords module identification, two-layer
+#' @seealso \code{\link{moduleIdentificationGPFixSSMultilayer}}
+#' @keywords module identification, multi-layer
 #' 
 #' @examples
-#' n=100
-#' k=20
-#' theta = 0.5
-#' pp <- networkSimulation(n,k,theta)
-#' W <- pp[[1]]
-#' moduleid <- pp[[3]]
-#' z1 <- runif(n, min=0, max=1)
-#' z1[moduleid] <- runif(k, min=theta, max=1)
-#' z2 <- runif(n, min=0, max=1)
-#' z2[moduleid] <- runif(k, min=theta, max=1)
-#' z3 <- runif(n, min=0, max=1)
-#' z3[moduleid] <- runif(k, min=theta, max=1)
-#' x0=rep(1/n,n)
-#' x1=x0
-#' x2=x0
-#' x3=x0
-#' xrest = vecconsensus(cbind(x2,x3))
-#' x1 = moduleIdentificationGPFixSSMultilayer(W,z1,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
-#' xrest = vecconsensus(cbind(x1,x3))
-#' x2 = moduleIdentificationGPFixSSMultilayer(W,z2,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
-#' xrest = vecconsensus(cbind(x1,x2))
-#' x3 = moduleIdentificationGPFixSSMultilayer(W,z3,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
-#' @export
-#'
-moduleIdentificationGPFixSSMultilayer <- function(W,zi,xrest,x0,lambdai=1,lambda=1,maxiter=1000,a=0.5){
+
+moduleIdentificationGPFixSSManylayer<- function(W, listz, x0, a=0.5, 
+                                                lambda = 1, maxiter=1000){
+    numlayer = length(listz)
     x = x0
     epsilon = 1e-6
-    grad_x = -W%*%x-lambdai*zi-lambda*xrest
+    z = listz[[1]]
+    grad = -W%*%x-lambda*z
+    f_x = -0.5*t(x)%*%W%*%x-lambda*(t(z)%*%x)
+    for (i in 2:numlayer){
+        z = listz[[i]]
+        grad = grad-lambda*z
+        f_x = f_x -lambda*(t(z)%*%x)
+    }
     
-    f_x = -0.5*t(x)%*%W%*%x-lambdai*(t(zi)%*%x)-lambda*(t(x)%*%xrest)
     func = numeric(maxiter)
     
     for (iteration in 1:maxiter){
         func[iteration] = f_x[1,1]
-        x_cand = EuclideanProjectionENNORM(x-1*grad_x,t=1,alpha = a)
-        grad_x = -W%*%x-lambdai*zi-lambda*xrest
+        x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
         if(sum(abs(x_cand-x)^2)^(1/2) < epsilon){break}
-        x = x_cand
-        grad_x = -W%*%x-lambdai*zi-lambda*xrest   
-        f_x = -0.5*t(x)%*%W%*%x-lambdai*(t(zi)%*%x)-lambda*(t(x)%*%xrest)
+        x=x_cand
+        
+        z = listz[[1]]
+        
+        grad = -W%*%x-lambda*z
+        f_x = -0.5*t(x)%*%W%*%x-lambda*(t(z)%*%x)
+        for (i in 2:numlayer){
+            z = listz[[i]]
+            grad = grad-lambda*z
+            f_x = f_x -lambda*(t(z)%*%x)
+        }
     }
-    return (x)
-}
-
-#' Vector consensus
-#' 
-#' a consensus of several vectors, keeping nonzero positions in all vectors
-#' 
-#' @param Mat membership matrix from other layers, n x l matrix
-#' 
-#' @return n-length vector 
-#' 
-#' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
-#' 
-#' @export
-#' 
-vecconsensus <- function(Mat){
-    n = dim(Mat)[1]
-    p = c(length=n)
-    for (i in 1:n){
-        p[i]=prod(Mat[i,])
-        if(p[i]!=0)
-            p[i] = 1
-    }
-    return(p)
+    return (list(func[1:iteration],x))
 }

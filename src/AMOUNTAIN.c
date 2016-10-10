@@ -354,21 +354,6 @@ void miGPFixSSTwolayer(double *W1, double *z1, double *x0, int *m_n1, double *x,
 	free(diffy);
 }
 
-CGPFixSSMultiLayer <- function(adj,listzs,a=0.5,lambda=1,maxiter=50){
-	N = dim(adj)[1]
-	out <- .C("miGPFixSSMultilayer",
-    W = as.vector(adj),
-    listz = as.vector(unlist(listzs)),
-    m_L = as.integer(length(listzs)),
-    x0 = as.vector(rep(1/N,N)),
-    m_n = as.integer(N),
-    x = as.vector(rep(1/N,N)),
-    func = as.vector(rep(0,maxiter)),
-    m_a = as.double(a),
-    m_lambda = as.double(lambda),
-    m_maxiter = as.integer(maxiter))
-    return(list(out$func[1:out$m_maxiter],out$x))
-}
 // when L layer share the same set of nodes, each layer has n nodes but with different z
 // 10000 nodes with 5 layers, 10x faster than R, maxiter=100, 36.063s vs 2.527s
 void miGPFixSSMultilayer(double *W, double *listz, int *m_L, double *x0, int *m_n, double *x, 

@@ -4,8 +4,9 @@ dyn.load(paste("../src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
 #' 
 #' Call C version of \code{\link{moduleIdentificationGPFixSS }}
 #' 
-#' @param adj edge score matrix of the network, n x n matrix
+#' @param W edge score matrix of the network, n x n matrix
 #' @param z node score vector of the network, n-length vector
+#' @param x0 initial solution, n-length vector
 #' @param a parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
 #' @param lambda parameter in objective, coefficient of node score part
 #' @param maxiter maximal interation of whole procedure
@@ -32,7 +33,7 @@ dyn.load(paste("../src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
 #' @export
 #' 
 
-CGPFixSS <- function(W,z,a,x0,lambda=1,maxiter=50){
+CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
 	N = dim(W)[1]
 	out <- .C("miGPFixSS",
     W = as.vector(W),
@@ -66,7 +67,7 @@ CGPFixSS <- function(W,z,a,x0,lambda=1,maxiter=50){
 #' @param a2 parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
 #' @param maxiter maximal interation of whole procedure
 #' 
-#' @return a list containing solution for network 1 and network 2 
+#' @return a list containing solution for network 1 and network 2 and objective
 #' 
 #' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
 #' @references AMOUNTAIN
