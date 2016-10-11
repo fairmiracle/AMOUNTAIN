@@ -16,8 +16,10 @@ CHANGES IN VERSION 0.99.3
 NEW FEATURES
 
     o C implementations
+    o Multilayer: all layers share the same network but with different node scores. 
 
 USER-LEVEL CHANGES
 
     o Faster choice of C versions
+    o New multilayer function
     
