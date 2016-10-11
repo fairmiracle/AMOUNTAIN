@@ -46,7 +46,7 @@ CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
     m_lambda = as.double(lambda),
     m_maxiter = as.integer(maxiter),
     m_protype = as.integer(1))
-    return(list(out$func[1:out$m_maxiter],out$x))
+    return(list(out$func[1:(out$m_maxiter-1)],out$x))
 }
 
 #' Module Identification for two-layer network

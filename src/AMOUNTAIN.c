@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <string.h>
-#include <unistd.h>
 #include <math.h>
 #include <gsl/gsl_cblas.h>
 #define epsilon 1e-6
