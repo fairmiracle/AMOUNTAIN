@@ -105,7 +105,7 @@ CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
 CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
         lambda1=1,lambda2=1,lambda3=1,maxiter=100,a1=0.5,a2=0.5){
         N1 = dim(W1)[1]
-        N2 = dim(adj2)[1]
+        N2 = dim(W2)[1]
         out <- .C("miGPFixSSTwolayer",
 	    W1 = as.vector(W1),
 	    z1 = as.vector(z1),
