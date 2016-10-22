@@ -257,7 +257,7 @@ void miGPFixSSTwolayer(double *W1, double *z1, double *x0, int *m_n1, double *x,
 	double *grad_x = Malloc(double, n1);
 	memcpy(grad_x,mWx,n1*sizeof(double));
 	cblas_daxpy(n1, -lambda1, z1, 1, grad_x, 1);
-	cblas_daxpy(n1, -1, Ay, 1, grad_x, 1);
+	cblas_daxpy(n1, -lambda3, Ay, 1, grad_x, 1);
 
 	double *grad_y = Malloc(double, n2);
 	//memcpy(grad_y,mWy,n2*sizeof(double));
@@ -291,7 +291,7 @@ void miGPFixSSTwolayer(double *W1, double *z1, double *x0, int *m_n1, double *x,
 		cblas_dgemv(CblasColMajor, CblasTrans, n1, n2, 1, A, n1, x_cand, 1, 0, tAx, 1);
 		memcpy(grad_y,mWy,n2*sizeof(double));
 		cblas_daxpy(n2, -lambda2, z2, 1, grad_y, 1);
-		cblas_daxpy(n2, -1, tAx, 1, grad_y, 1);
+		cblas_daxpy(n2, -lambda3, tAx, 1, grad_y, 1);
 
 		memcpy(piy, y, n2*sizeof(double));
 		cblas_daxpy(n2, -1, grad_y, 1, piy, 1);
@@ -324,7 +324,7 @@ void miGPFixSSTwolayer(double *W1, double *z1, double *x0, int *m_n1, double *x,
 		cblas_dgemv(CblasColMajor, CblasNoTrans, n1, n2, 1, A, n1, y, 1, 0, Ay, 1);
 		memcpy(grad_x,mWx,n1*sizeof(double));
 		cblas_daxpy(n1, -lambda1, z1, 1, grad_x, 1);
-		cblas_daxpy(n1, -1, Ay, 1, grad_x, 1);
+		cblas_daxpy(n1, -lambda3, Ay, 1, grad_x, 1);
 
 		cblas_dgemv(CblasColMajor, CblasNoTrans, n2, n2, -1, W2, n2, y, 1, 0, mWy, 1);
 		

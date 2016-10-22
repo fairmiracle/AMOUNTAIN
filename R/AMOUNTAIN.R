@@ -265,32 +265,32 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
     x = x0
     y = y0
     epsilon = 1e-6
-    grad_x = -W1%*%x-lambda1*z1-A%*%y
-    grad_y = -W2%*%y-lambda2*z2-t(A)%*%x
+    grad_x = -W1%*%x-lambda1*z1-lambda3*A%*%y
+    grad_y = -W2%*%y-lambda2*z2-lambda3*t(A)%*%x
     f_x = -0.5*t(x)%*%W1%*%x-lambda1*(t(z1)%*%x)-0.5*t(y)%*%W2%*%y-
-        lambda2*(t(z2)%*%y)-t(x)%*%A%*%y
+        lambda2*(t(z2)%*%y)-lambda3*t(x)%*%A%*%y
     func = numeric(maxiter)
-    
+
     for (iteration in 1:maxiter){
         #y = x-1*grad
         #print(sum(y)+0.5*gamma*sum(y*y))
         func[iteration] = f_x
         x_cand = EuclideanProjectionENNORM(x-1*grad_x,t=1,alpha = a1)
         #grad_x = -W1%*%x_cand-lambda1*z1-A%*%y
-        
+
         y_cand = EuclideanProjectionENNORM(y-1*grad_y,t=1,alpha = a2)
         #grad_y = -W2%*%y_cand-lambda2*z2-t(A)%*%grad_x
         #x_cand = EuclideanProjection(x-1*grad,t=radius)
         #x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
-        if(sum(abs(x_cand-x)^2)^(1/2) < epsilon && 
+        if(sum(abs(x_cand-x)^2)^(1/2) < epsilon &&
                sum(abs(y_cand-y)^2)^(1/2) < epsilon){break}
         x = x_cand
         y = y_cand
-        grad_x = -W1%*%x-lambda1*z1-A%*%y
-        grad_y = -W2%*%y-lambda2*z2-t(A)%*%x
+        grad_x = -W1%*%x-lambda1*z1-lambda3*A%*%y
+        grad_y = -W2%*%y-lambda2*z2-lambda3*t(A)%*%x
         
         f_x = -0.5*t(x)%*%W1%*%x-lambda1*(t(z1)%*%x)-0.5*t(y)%*%W2%*%y-
-            lambda2*(t(z2)%*%y)-t(x)%*%A%*%y
+            lambda2*(t(z2)%*%y)-lambda3*t(x)%*%A%*%y
     }
     return (list(x,y,func[1:iteration]))
 }
