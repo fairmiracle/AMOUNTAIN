@@ -1,15 +1,12 @@
-CHANGES IN VERSION 0.99.1
+CHANGES IN VERSION 1.0.1
 ------------------------
 NEW FEATURES
 
-    o Initial version
+    o C implementations
 
 USER-LEVEL CHANGES
 
-    o More comprehensive help pages
-
-    o BiocStyle Vignette
-
+    o R markdown vignette
 
 CHANGES IN VERSION 0.99.3
 ------------------------
@@ -22,4 +19,15 @@ USER-LEVEL CHANGES
 
     o Faster choice of C versions
     o New multilayer function
-    
+
+CHANGES IN VERSION 0.99.1
+------------------------
+NEW FEATURES
+
+    o Initial version
+
+USER-LEVEL CHANGES
+
+    o More comprehensive help pages
+
+    o BiocStyle Vignette
