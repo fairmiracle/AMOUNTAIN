@@ -27,7 +27,7 @@ Here is a table of C-version functions and pure R functions:
 | C-version|      Pure R   |  Brief description                  |
 |:----------|:-------------|:--------------------------------------------|
 | `CGPFixSS` |  `moduleIdentificationGPFixSS` | Module identification on single network |
-| `texttt{CGPFixSSTwolayer` | `moduleIdentificationGPFixSSTwolayer` | Module identification on two-layer network |
+| `CGPFixSSTwolayer` | `moduleIdentificationGPFixSSTwolayer` | Module identification on two-layer network |
 | `CGPFixSSMultiLayer` |  `moduleIdentificationGPFixSSMultilayer` | Module identification on multi-layer network |
 
 # Refererence
