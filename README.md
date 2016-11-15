@@ -8,7 +8,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("AMOUNTAIN")
 ```
 
-Install the developer version from github, on Linux:
+Install the developer version from github, on Linux with GSL:
 ```
 git clone https://github.com/fairmiracle/AMOUNTAIN.git
 cd AMOUNTAIN
@@ -26,9 +26,9 @@ Here is a table of C-version functions and pure R functions:
 
 | C-version|      Pure R   |  Brief description                  |
 |:----------|:-------------|:--------------------------------------------|
-| $\texttt{CGPFixSS}$ |  $\texttt{moduleIdentificationGPFixSS}$ | Module identification on single network |
-| $\texttt{CGPFixSSTwolayer}$ | $\texttt{moduleIdentificationGPFixSSTwolayer}$ | Module identification on two-layer network |
-| $\texttt{CGPFixSSMultiLayer}$ |  $\texttt{moduleIdentificationGPFixSSMultilayer}$ | Module identification on multi-layer network |
+| `CGPFixSS` |  `moduleIdentificationGPFixSS` | Module identification on single network |
+| `texttt{CGPFixSSTwolayer` | `moduleIdentificationGPFixSSTwolayer` | Module identification on two-layer network |
+| `CGPFixSSMultiLayer` |  `moduleIdentificationGPFixSSMultilayer` | Module identification on multi-layer network |
 
 # Refererence
 Dong Li, Shan He, Zhisong Pan, Guyu Hu. Active modules for multilayer weighted gene co-expression networks: 
