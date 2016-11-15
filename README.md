@@ -12,8 +12,9 @@ Install the developer version from github, on Linux with GSL:
 ```
 git clone https://github.com/fairmiracle/AMOUNTAIN.git
 cd AMOUNTAIN
-gcc -c AMOUNTAIN.c -fPIC -std=c99
-gcc -shared -o AMOUNTAIN.so AMOUNTAIN.o -lgsl -lgslcblas
+gcc -c src/AMOUNTAIN.c -fPIC -std=c99
+gcc -shared -o src/AMOUNTAIN.so AMOUNTAIN.o -lgsl -lgslcblas
+rm AMOUNTAIN.o
 ```
 
 To use C version functions in R:
