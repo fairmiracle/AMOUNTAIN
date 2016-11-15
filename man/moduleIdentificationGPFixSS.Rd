@@ -42,7 +42,7 @@ Fscore <- (2*precise*recall/(precise+recall))
 Dong Li, \email{dxl466@cs.bham.ac.uk}
 }
 \references{
-MOUNTAIN
+AMOUNTAIN
 }
 \seealso{
 \code{\link{EuclideanProjectionENNORM}}

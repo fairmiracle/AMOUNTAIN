@@ -96,6 +96,56 @@ twolayernetworkSimulation<-function(n1,k1,theta1,n2,k2,theta2){
     return (list(pp1,pp2,A))
 }
 
+#' Illustration of multi-layer weighted network simulation
+#' 
+#' Simulate a multi-layer weighted network with each layer sharing the same set
+#' of nodes but different nodes scores
+#' 
+#' @param n number of nodes in each layer of the network
+#' @param k number of nodes in the conserved module
+#' @param theta module node score follow the uniform distribution in range [theta,1]
+#' @param L number of layers
+#' 
+#' @return a list containing all the layers, each as result object of \link{networkSimulation} 
+#' 
+#' @author Dong Li, \email{dxl466@cs.bham.ac.uk}
+#' @seealso \code{\link{networkSimulation}}
+#' @keywords simulation
+#' 
+#' @examples
+#' n = 100
+#' k = 20
+#' theta = 0.5
+#' L = 5
+#' cpl <- multilayernetworkSimulation(n,k,theta,L)
+#' ## No proper way to visualize it yet
+#' @export
+#' 
+multilayernetworkSimulation<-function(n,k,theta,L){
+    E <- matrix(runif(n*n, min=0, max=1),nrow = n)
+    E[lower.tri(E)] = t(E)[lower.tri(E)]
+    diag(E) = 1
+    
+    #Z <- runif(n, min=0, max=1)
+    moduleid <- sample(n, k)
+    #Z[moduleid] <- runif(k, min=theta, max=1)
+    
+    module <- matrix(runif(k*k, min=theta, max=1),nrow = k)
+    module[lower.tri(module)] <- t(module)[lower.tri(module)]
+    diag(module) = 1
+    E[moduleid,moduleid] <- module
+    ppl = list()
+    ppl[[1]] = E
+    ppl[[2]] = moduleid
+    
+    for(i in 1:L){
+        Z <- runif(n, min=0, max=1)
+        Z[moduleid] <- runif(k, min=theta, max=1)
+        ppl[[i+2]] <- Z
+    }
+    ppl
+}
+
 #' Module Identification
 #' 
 #' Algorithm for Module Identification on single network
@@ -134,19 +184,19 @@ moduleIdentificationGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=1000){
     grad = -W%*%x-lambda*z
     f_x = -0.5*t(x)%*%W%*%x-lambda*(t(z)%*%x)
     func = numeric(maxiter)
-
+    
     for (iteration in 1:maxiter){
-            #y = x-1*grad
-            #print(sum(y)+0.5*gamma*sum(y*y))
-            func[iteration] = f_x
-            #x_cand = EuclideanProjectionEN(x-1*grad,t=1,alpha = a)
-            #x_cand = EuclideanProjection(x-1*grad,t=radius)
-            x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
-            if(sum(abs(x_cand-x)^2)^(1/2) < epsilon){break}
-            x=x_cand
-            grad = -W%*%x-lambda*z
-            f_x = -0.5*t(x)%*%W%*%x-lambda*(t(z)%*%x)
-            
+        #y = x-1*grad
+        #print(sum(y)+0.5*gamma*sum(y*y))
+        func[iteration] = f_x
+        #x_cand = EuclideanProjectionEN(x-1*grad,t=1,alpha = a)
+        #x_cand = EuclideanProjection(x-1*grad,t=radius)
+        x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
+        if(sum(abs(x_cand-x)^2)^(1/2) < epsilon){break}
+        x=x_cand
+        grad = -W%*%x-lambda*z
+        f_x = -0.5*t(x)%*%W%*%x-lambda*(t(z)%*%x)
+        
     }
     return (list(func[1:(iteration-1)],x))
 }
@@ -261,7 +311,7 @@ EuclideanProjectionENNORM <- function(y,t,alpha = 0.5){
 #' @export
 #' 
 moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
-                                    lambda2=1,lambda3=1,maxiter=1000,a1=0.5,a2=0.5){
+                                                lambda2=1,lambda3=1,maxiter=1000,a1=0.5,a2=0.5){
     x = x0
     y = y0
     epsilon = 1e-6
@@ -270,20 +320,20 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
     f_x = -0.5*t(x)%*%W1%*%x-lambda1*(t(z1)%*%x)-0.5*t(y)%*%W2%*%y-
         lambda2*(t(z2)%*%y)-lambda3*t(x)%*%A%*%y
     func = numeric(maxiter)
-
+    
     for (iteration in 1:maxiter){
         #y = x-1*grad
         #print(sum(y)+0.5*gamma*sum(y*y))
         func[iteration] = f_x
         x_cand = EuclideanProjectionENNORM(x-1*grad_x,t=1,alpha = a1)
         #grad_x = -W1%*%x_cand-lambda1*z1-A%*%y
-
+        
         y_cand = EuclideanProjectionENNORM(y-1*grad_y,t=1,alpha = a2)
         #grad_y = -W2%*%y_cand-lambda2*z2-t(A)%*%grad_x
         #x_cand = EuclideanProjection(x-1*grad,t=radius)
         #x_cand = EuclideanProjectionENNORM (x-1*grad,t=1,alpha = a)
         if(sum(abs(x_cand-x)^2)^(1/2) < epsilon &&
-               sum(abs(y_cand-y)^2)^(1/2) < epsilon){break}
+           sum(abs(y_cand-y)^2)^(1/2) < epsilon){break}
         x = x_cand
         y = y_cand
         grad_x = -W1%*%x-lambda1*z1-lambda3*A%*%y
@@ -300,7 +350,7 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
 #' Algorithm for Module Identification on multi-layer network sharing the same set of genes
 #' 
 #' @param W edge score matrix of the network, n x n matrix
-#' @param listzs a list of node score vectors, each layer has a n-length vector
+#' @param listz a list of node score vectors, each layer has a n-length vector
 #' @param x0 initial solution, n-length vector
 #' @param a parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}
 #' @param lambda parameter in objective, coefficient of node score of other layers
@@ -314,9 +364,26 @@ moduleIdentificationGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,A,lambda1=1,
 #' @keywords module identification, multi-layer
 #' 
 #' @examples
+#' n = 100
+#' k = 20
+#' L = 5
+#' theta = 0.5
+#' cpl <- multilayernetworkSimulation(n,k,theta,L)
+#' listz <- list()
+#' for (i in 1:L){
+#' listz[[i]] <- cpl[[i+2]]
+#' }
+#' moduleid <- cpl[[2]]
+#' ## use default parameters here
+#' x <- moduleIdentificationGPFixSSMultilayer(cpl[[1]],listz,rep(1/n,n))
+#' predictedid <- which(x[[2]]!=0)
+#' recall <- length(intersect(predictedid,moduleid))/length(moduleid)
+#' precise <- length(intersect(predictedid,moduleid))/length(predictedid)
+#' Fscore <- (2*precise*recall/(precise+recall))
+#' @export
 
-moduleIdentificationGPFixSSManylayer<- function(W, listz, x0, a=0.5, 
-                                                lambda = 1, maxiter=1000){
+moduleIdentificationGPFixSSMultilayer <- function(W, listz, x0, a=0.5, 
+                                                  lambda = 1, maxiter=1000){
     numlayer = length(listz)
     x = x0
     epsilon = 1e-6

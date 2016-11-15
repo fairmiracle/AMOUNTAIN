@@ -4,66 +4,56 @@
 \alias{moduleIdentificationGPFixSSMultilayer}
 \title{Module Identification for multi-layer network}
 \usage{
-moduleIdentificationGPFixSSMultilayer(W, zi, xrest, x0, lambdai = 1,
-  lambda = 1, maxiter = 1000, a = 0.5)
+moduleIdentificationGPFixSSMultilayer(W, listz, x0, a = 0.5, lambda = 1,
+  maxiter = 1000)
 }
 \arguments{
 \item{W}{edge score matrix of the network, n x n matrix}
 
-\item{zi}{node score vector of this layer, n-length vector}
-
-\item{xrest}{consensus solution from the rest membership \code{\link{vecconsensus}}}
+\item{listz}{a list of node score vectors, each layer has a n-length vector}
 
 \item{x0}{initial solution, n-length vector}
 
-\item{lambdai}{parameter in objective, coefficient of node score of current layer}
+\item{a}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
 
 \item{lambda}{parameter in objective, coefficient of node score of other layers}
 
 \item{maxiter}{maximal interation of whole procedure}
-
-\item{a}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
 }
 \value{
-a list containing solution for network 1 and network 2
+a list containing objective values and solution
 }
 \description{
 Algorithm for Module Identification on multi-layer network sharing the same set of genes
 }
 \examples{
-n=100
-k=20
+n = 100
+k = 20
+L = 5
 theta = 0.5
-pp <- networkSimulation(n,k,theta)
-W <- pp[[1]]
-moduleid <- pp[[3]]
-z1 <- runif(n, min=0, max=1)
-z1[moduleid] <- runif(k, min=theta, max=1)
-z2 <- runif(n, min=0, max=1)
-z2[moduleid] <- runif(k, min=theta, max=1)
-z3 <- runif(n, min=0, max=1)
-z3[moduleid] <- runif(k, min=theta, max=1)
-x0=rep(1/n,n)
-x1=x0
-x2=x0
-x3=x0
-xrest = vecconsensus(cbind(x2,x3))
-x1 = moduleIdentificationGPFixSSMultilayer(W,z1,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
-xrest = vecconsensus(cbind(x1,x3))
-x2 = moduleIdentificationGPFixSSMultilayer(W,z2,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
-xrest = vecconsensus(cbind(x1,x2))
-x3 = moduleIdentificationGPFixSSMultilayer(W,z3,xrest,x0,lambdai=1,lambda=1,maxiter=100,a=0.5)
+cpl <- multilayernetworkSimulation(n,k,theta,L)
+listz <- list()
+for (i in 1:L){
+listz[[i]] <- cpl[[i+2]]
+}
+moduleid <- cpl[[2]]
+## use default parameters here
+x <- moduleIdentificationGPFixSSMultilayer(cpl[[1]],listz,rep(1/n,n))
+predictedid <- which(x[[2]]!=0)
+recall <- length(intersect(predictedid,moduleid))/length(moduleid)
+precise <- length(intersect(predictedid,moduleid))/length(predictedid)
+Fscore <- (2*precise*recall/(precise+recall))
 }
 \author{
 Dong Li, \email{dxl466@cs.bham.ac.uk}
 }
 \references{
-MOUNTAIN
+AMOUNTAIN
 }
 \seealso{
-\code{\link{vecconsensus}}
+\code{\link{moduleIdentificationGPFixSSMultilayer}}
 }
 \keyword{identification,}
 \keyword{module}
-\keyword{two-layer}
+\keyword{multi-layer}
 

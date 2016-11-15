@@ -5,7 +5,7 @@
 \title{Module Identification for two-layer network}
 \usage{
 moduleIdentificationGPFixSSTwolayer(W1, z1, x0, W2, z2, y0, A, lambda1 = 1,
-  lambda2 = 1, lambda3 = 1, maxiter = 1000, a = 0.5)
+  lambda2 = 1, lambda3 = 1, maxiter = 1000, a1 = 0.5, a2 = 0.5)
 }
 \arguments{
 \item{W1}{edge score matrix of the network 1, n_1 x n_1 matrix}
@@ -30,10 +30,12 @@ moduleIdentificationGPFixSSTwolayer(W1, z1, x0, W2, z2, y0, A, lambda1 = 1,
 
 \item{maxiter}{maximal interation of whole procedure}
 
-\item{a}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
+\item{a1}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
+
+\item{a2}{parameter in elastic net the same as in \code{\link{EuclideanProjectionENNORM}}}
 }
 \value{
-a list containing solution for network 1 and network 2
+a list containing solution for network 1 and network 2 and objective
 }
 \description{
 Algorithm for Module Identification on two-layer network
@@ -69,7 +71,7 @@ F2 = 2*precise2*recall2/(precise2+recall2)
 Dong Li, \email{dxl466@cs.bham.ac.uk}
 }
 \references{
-MOUNTAIN
+AMOUNTAIN
 }
 \seealso{
 \code{\link{EuclideanProjectionENNORM}}
