@@ -21,7 +21,7 @@ void Vmul(double *x, double *y, int n) {
         x[i] = x[i]*y[i];
     }
 }
-
+/*
 void OutPutVector(double* A, int N)
 {
 	//printf("Vector: %d\n",N);
@@ -30,6 +30,8 @@ void OutPutVector(double* A, int N)
 			printf("%10.4f ",*(A+i));
 	printf("\n");
 }
+*/
+
 //S = which(list > theta)
 //list[S]...
 int Which(double *list, int n, double theta, double *cplist) {
@@ -446,9 +448,9 @@ int main(int argc, char const *argv[])
 	double lambda = 1;
 	int maxi = 10;
 
-	miGPFixSS(W, z, x0, &n, x, func, &alpha, &lambda, &maxi);
+	//miGPFixSS(W, z, x0, &n, x, func, &alpha, &lambda, &maxi);
 
-	OutPutVector(x, 3);
-	OutPutVector(func, 3);
+	//OutPutVector(x, 3);
+	//OutPutVector(func, 3);
 	return 0;
 }

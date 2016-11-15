@@ -1,4 +1,4 @@
-# dyn.load(paste("../src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
+# dyn.load(paste("src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
 
 #' Module Identification
 #' 
@@ -35,7 +35,7 @@
 
 CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
 	N = dim(W)[1]
-	out <- .C("miGPFixSS",
+	out <- .C("miGPFixSS", PACKAGE = "AMOUNTAIN",
     W = as.vector(W),
     z = as.vector(z),
     x0 = as.vector(x0),
@@ -106,7 +106,7 @@ CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
         lambda1=1,lambda2=1,lambda3=1,maxiter=100,a1=0.5,a2=0.5){
         N1 = dim(W1)[1]
         N2 = dim(W2)[1]
-        out <- .C("miGPFixSSTwolayer",
+        out <- .C("miGPFixSSTwolayer", PACKAGE = "AMOUNTAIN",
 	    W1 = as.vector(W1),
 	    z1 = as.vector(z1),
 	    x0 = as.vector(x0),
@@ -150,7 +150,7 @@ CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
 #' @examples
 CGPFixSSMultiLayer <- function(W,listzs,x0,a=0.5,lambda=1,maxiter=50){
 	N = dim(W)[1]
-	out <- .C("miGPFixSSMultilayer",
+	out <- .C("miGPFixSSMultilayer", PACKAGE = "AMOUNTAIN",
     W = as.vector(W),
     listz = as.vector(unlist(listzs)),
     m_L = as.integer(length(listzs)),
