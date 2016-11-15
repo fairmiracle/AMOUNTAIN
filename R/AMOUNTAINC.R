@@ -1,4 +1,4 @@
-# dyn.load(paste("src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
+# dyn.load(paste("../src/AMOUNTAIN", .Platform$dynlib.ext, sep = ""))
 
 #' Module Identification
 #' 
