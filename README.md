@@ -8,7 +8,15 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("AMOUNTAIN")
 ```
 
-Install the developer version from github, on Linux with GSL:
+Install the development version from Github
+```
+library(devtools)
+install_github("fairmiracle/AMOUNTAIN")
+```
+## Compile on Linux
+Make sure GSL in installed, type `gsl-config` in terminal.
+
+To compile C code:
 ```
 git clone https://github.com/fairmiracle/AMOUNTAIN.git
 cd AMOUNTAIN
@@ -31,6 +39,13 @@ Here is a table of C-version functions and pure R functions:
 | `CGPFixSSTwolayer` | `moduleIdentificationGPFixSSTwolayer` | Module identification on two-layer network |
 | `CGPFixSSMultiLayer` |  `moduleIdentificationGPFixSSMultilayer` | Module identification on multi-layer network |
 
+## Compile on Windows
+It is not that straightforward to compile with GSL under Windows. Someone has created GSL Windows DLL and headers for both 32 and 64-bit in https://code.google.com/archive/p/oscats/downloads. Extract gsl-1.15-dev-win32.zip and gsl-1.15-dev-win64.zip into two directories:
+
+ - C:\GSL\i386
+ - C:\GSL\x64
+
+and set the environment variable `LIB_GSL` as  `C:/GSL` instead of `C:\GSL`. Finally add `C:\GSL\x64\bin` to the `Path` in case missing the DLLs. Then the source can be compiled.
+
 # Refererence
-Dong Li, Shan He, Zhisong Pan, Guyu Hu. Active modules for multilayer weighted gene co-expression networks: 
-a convex optimization approach. biorxiv 2016. http://www.biorxiv.org/content/early/2016/06/03/056952
+Dong Li, Shan He, Zhisong Pan, Guyu Hu. Active modules for multilayer weighted gene co-expression networks: a convex optimization approach. biorxiv 2016. http://www.biorxiv.org/content/early/2016/06/03/056952
