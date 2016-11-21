@@ -1,14 +1,2 @@
-# Makefile for building the C language shared library for the AMOUNTAIN package.
-C = gcc
-OPTS = -c -fPIC
-LOADER = gcc
-
-OBJECTS = AMOUNTAIN.o
-
- AMOUNTAIN.so: $(OBJECTS)
-	R CMD SHLIB -o AMOUNTAIN.so $(OBJECTS)
-
-.c.o: ; $(C) $(OPTS) -c $<
-
-clean:
-	-rm *.o *.so
+PKG_CFLAGS = `gsl-config --cflags` -DR_DIRICHLETMULTINOMIAL
+PKG_LIBS = `gsl-config --libs`

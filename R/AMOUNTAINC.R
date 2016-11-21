@@ -2,7 +2,7 @@
 
 #' Module Identification
 #' 
-#' Call C version of \code{\link{moduleIdentificationGPFixSS }}
+#' Call C version of moduleIdentificationGPFixSS
 #' 
 #' @param W edge score matrix of the network, n x n matrix
 #' @param z node score vector of the network, n-length vector
@@ -35,7 +35,7 @@
 
 CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
 	N = dim(W)[1]
-	out <- .C("miGPFixSS", PACKAGE = "AMOUNTAIN",
+	out <- .C("miGPFixSS", 
     W = as.vector(W),
     z = as.vector(z),
     x0 = as.vector(x0),
@@ -51,7 +51,7 @@ CGPFixSS <- function(W,z,x0,a=0.5,lambda=1,maxiter=50){
 
 #' Module Identification for two-layer network
 #' 
-#' Call C version of \code{\link{moduleIdentificationGPFixSSTwolayer}}
+#' Call C version of moduleIdentificationGPFixSSTwolayer
 #' 
 #' @param W1 edge score matrix of the network 1, n_1 x n_1 matrix
 #' @param z1 node score vector of the network 1, n_1-length vector
@@ -106,7 +106,7 @@ CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
         lambda1=1,lambda2=1,lambda3=1,maxiter=100,a1=0.5,a2=0.5){
         N1 = dim(W1)[1]
         N2 = dim(W2)[1]
-        out <- .C("miGPFixSSTwolayer", PACKAGE = "AMOUNTAIN",
+        out <- .C("miGPFixSSTwolayer", 
 	    W1 = as.vector(W1),
 	    z1 = as.vector(z1),
 	    x0 = as.vector(x0),
@@ -131,7 +131,7 @@ CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
 
 #' Module Identification for multi-layer network
 #' 
-#' Call C version of \code{\link{moduleIdentificationGPFixSSMultilayer}}
+#' Call C version of moduleIdentificationGPFixSSMultilayer
 #' 
 #' @param W edge score matrix of the network, n x n matrix
 #' @param listzs a list of node score vectors, each layer has a n-length vector
@@ -148,9 +148,27 @@ CGPFixSSTwolayer <- function(W1,z1,x0,W2,z2,y0,interlayerA,
 #' @keywords module identification, multi-layer
 #' 
 #' @examples
+#' n = 100
+#' k = 20
+#' L = 5
+#' theta = 0.5
+#' cpl <- multilayernetworkSimulation(n,k,theta,L)
+#' listz <- list()
+#' for (i in 1:L){
+#' listz[[i]] <- cpl[[i+2]]
+#' }
+#' moduleid <- cpl[[2]]
+#' ## use default parameters here
+#' x <- CGPFixSSMultiLayer(cpl[[1]],listz,rep(1/n,n))
+#' predictedid <- which(x[[2]]!=0)
+#' recall <- length(intersect(predictedid,moduleid))/length(moduleid)
+#' precise <- length(intersect(predictedid,moduleid))/length(predictedid)
+#' Fscore <- (2*precise*recall/(precise+recall))
+#' @export
+#' 
 CGPFixSSMultiLayer <- function(W,listzs,x0,a=0.5,lambda=1,maxiter=50){
 	N = dim(W)[1]
-	out <- .C("miGPFixSSMultilayer", PACKAGE = "AMOUNTAIN",
+	out <- .C("miGPFixSSMultilayer",
     W = as.vector(W),
     listz = as.vector(unlist(listzs)),
     m_L = as.integer(length(listzs)),

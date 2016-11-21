@@ -435,9 +435,9 @@ void miGPFixSSMultilayer(double *W, double *listz, int *m_L, double *x0, int *m_
 	free(diffx);
 
 }
+/*
 int main(int argc, char const *argv[])
 {
-	/* code */
 	double W[9]={1,2,0,4,5,0,0,0,3};
 	double z[3]={1,2,-3};
 	double x0[3]={0.3,0.2,0.3};
@@ -454,3 +454,4 @@ int main(int argc, char const *argv[])
 	//OutPutVector(func, 3);
 	return 0;
 }
+*/
