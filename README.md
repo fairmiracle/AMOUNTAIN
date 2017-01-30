@@ -1,3 +1,5 @@
+[![platform](http://www.bioconductor.org/shields/availability/devel/AMOUNTAIN.svg)](https://www.bioconductor.org/packages/devel/bioc/html/AMOUNTAIN.html#archives) [![Build Status](http://www.bioconductor.org/shields/build/devel/bioc/AMOUNTAIN.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/AMOUNTAIN/)
+
 Bioconductor page http://bioconductor.org/packages/AMOUNTAIN
 
 # Installation
